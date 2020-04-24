@@ -1,0 +1,14 @@
+{
+  "name": "illinois_covid19",
+  "version": "1.0.0",
+  "description": "Crawl Illinois Covid19 Statistics",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "David Yu",
+  "license": "ISC",
+  "dependencies": {
+    "puppeteer": "^3.0.1"
+  }
+}
