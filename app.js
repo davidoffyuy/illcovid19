@@ -17,10 +17,18 @@ const getCovid19 = async () => {
   await page.goto('https://www.dph.illinois.gov/covid19/covid19-statistics');
   // await page.evaluate('document.querySelector(\'.pagination > li:first-child > a\').click();');
   
+  // Click on County to show statistics by each county. Delay is necessary to allow SPA function to complete.
   await page.click('.pagination > li:first-child > a');
   await delay(2000);
 
-  await page.screenshot({path: 'test.png'});
+  const dateListElement = await page.$('#paginMap');
+  const testValue = await page.evaluate(el => el.querySelector('li:nth-last-child(2) > a').innerHTML, dateListElement);
+  // const testValue = await page.evaluate(el => {
+  //   'document.querySelector(\'li:last-child(2) > a\').innerHTML;');
+  console.log("testValue: " + testValue);
+
+  // Test screenshot to show page has loaded
+  // await page.screenshot({path: 'test.png'});
 
   await browser.close();
 };
