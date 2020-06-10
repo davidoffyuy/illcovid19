@@ -4,7 +4,6 @@ const readline = require('readline').createInterface({
   output: process.stdout
 });
 const delay = require('./util/delay');
-const shouldExit = 0;
 let county = '';
 
 const getCovid19 = async () => {
@@ -23,9 +22,18 @@ const getCovid19 = async () => {
   page.keyboard.type(county);
   await delay (1000);
 
-  //Get the number of dates displayed. Last element is a arrow and not a date.
+  //Get list and the number of dates displayed. Last element is an arrow and not a date.
   const dateListElements = await page.$$('#paginMap > li');
   const dateLength = dateListElements.length - 1;
+  
+  // we want to create a loop that traverses each date and add it to a newly created data object.
+  let CovidData = [];
+  for (let i = dateLength - 1; i >= 0; i--) {
+    // click on the element
+    await page.click('#paginMap > li:nth-child(' + i + ') > a' );
+  }
+
+
 
   // const testValue = await page.evaluate(el => el.querySelector('li:nth-last-child(2) > a').innerHTML, dateListElement);
   // const listElements = await dateListElement.$$('li');
@@ -42,7 +50,7 @@ const getCovid19 = async () => {
   await browser.close();
 };
 
-// Reading user inputting the county. This is will all other functions are called.
+// Reading user inputting the county. This is will call all other functions.
 readline.question(`County?`, (inputCounty) => {
   readline.close();
 
