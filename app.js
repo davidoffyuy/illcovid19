@@ -28,9 +28,22 @@ const getCovid19 = async () => {
   
   // we want to create a loop that traverses each date and add it to a newly created data object.
   let CovidData = [];
-  for (let i = dateLength - 1; i >= 0; i--) {
-    // click on the element
-    await page.click('#paginMap > li:nth-child(' + i + ') > a' );
+  for (let i = dateLength - 1; i > 0; i--) {
+    //Click on the date and wait to load
+    await page.click('#paginMap > li:nth-child(' + (i + 1) + ') > a' );
+    await delay (500);
+
+    // get data and push to array
+    const detailedData = await page.$('#detailedData');
+    let caseCount = await page.evaluate(el => {
+      return el.querySelector('tbody > tr > td:nth-child(3)').innerHTML;
+    }, detailedData);
+    console.log(caseCount);
+
+    let deathCount = await page.evaluate(el => {
+      return el.querySelector('tbody > tr > td:nth-child(4)').innerHTML;
+    }, detailedData);
+    console.log(deathCount);
   }
 
 
