@@ -31,10 +31,14 @@ const getCovid19 = async () => {
   let CovidData = [];
   for (let i = dateLength - 1; i > 0; i--) {
     //Click on the date and wait to load
-    await page.click('#paginMap > li:nth-child(' + (i + 1) + ') > a' );
-    await delay (500);
+    let dateLink = await page.$('#paginMap > li:nth-child(' + (i + 1) + ') > a')
+    await dateLink.click();
+    await delay(500);
 
     // get data and push to array
+    let caseDate = await page.evaluate(el => el.innerHTML, dateLink);
+    console.log(caseDate);
+
     const detailedData = await page.$('#detailedData');
     let caseCount = await page.evaluate(el => {
       return el.querySelector('tbody > tr > td:nth-child(3)').innerHTML;
