@@ -12,7 +12,8 @@ const getCovid19 = async () => {
   await page.setViewport({ width: 1920, height: 1080});
 
   await page.goto('https://www.dph.illinois.gov/covid19/covid19-statistics');
-  
+  await delay(1000);
+
   //Click on 'By County' to show statistics and sort by each county. Delay is used to allow SPA function to complete.
   await page.click('.pagination > li:first-child > a');
   await delay(2000);
@@ -74,6 +75,3 @@ readline.question(`County?`, (inputCounty) => {
   // Begin crawling website
   getCovid19();
 });
-
-
-// test
