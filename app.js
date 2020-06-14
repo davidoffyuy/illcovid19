@@ -4,8 +4,11 @@ const readline = require('readline').createInterface({
   output: process.stdout
 });
 const delay = require('./util/delay');
+
+//GLOBAL DECLARATION
 let county = '';
 
+//Function will use Puppeteer to get all data
 const getCovid19 = async () => {
   const browser = await puppeteer.launch({headless: false});
   const page = await browser.newPage();
@@ -35,9 +38,9 @@ const getCovid19 = async () => {
     await dateLink.click();
     await delay(500);
 
-    // get data and push to array
-    let caseDate = await page.evaluate(el => el.innerHTML, dateLink);
-    console.log(caseDate);
+    // get data from page
+    let dataDate = await page.evaluate(el => el.innerHTML, dateLink);
+    console.log(dataDate);
 
     const detailedData = await page.$('#detailedData');
     let caseCount = await page.evaluate(el => {
@@ -49,25 +52,17 @@ const getCovid19 = async () => {
       return el.querySelector('tbody > tr > td:nth-child(4)').innerHTML;
     }, detailedData);
     console.log(deathCount);
+
+    // create object with data and push to array
+    CovidData.push({date: dataDate, cases: caseCount, deaths: deathCount});
   }
 
-
-
-  // const testValue = await page.evaluate(el => el.querySelector('li:nth-last-child(2) > a').innerHTML, dateListElement);
-  // const listElements = await dateListElement.$$('li');
-  // console.log('Length: ' + listElements.length);
-  // const testValue = await page.evaluate(el => el.querySelector('a').innerHTML, listElements[2]);
-  // console.log('testValue: ' + testValue);
-
-  // const testValue = await page.evaluate(el => {
-  //   'document.querySelector(\'li:last-child(2) > a\').innerHTML;');
-
-  // Test screenshot to show page has loaded
-  // await page.screenshot({path: 'test.png'});
-
+  console.log("Covid Data");
+  console.log(CovidData);
   await browser.close();
 };
 
+// PROGRAM STARTS HERE
 // Reading user inputting the county. This is will call all other functions.
 readline.question(`County?`, (inputCounty) => {
   readline.close();
