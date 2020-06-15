@@ -9,6 +9,7 @@
   "author": "David Yu",
   "license": "ISC",
   "dependencies": {
+    "csv-writer": "^1.6.0",
     "puppeteer": "^3.0.1"
   }
 }

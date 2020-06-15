@@ -1,66 +1,72 @@
-const puppeteer = require('puppeteer');
-const readline = require('readline').createInterface({
+const puppeteer = require("puppeteer");
+const readline = require("readline").createInterface({
   input: process.stdin,
-  output: process.stdout
+  output: process.stdout,
 });
-const delay = require('./util/delay');
+const delay = require("./util/delay");
 
 //GLOBAL DECLARATION
-let county = '';
+let county = "";
 
 //Function will use Puppeteer to get all data
 const getCovid19 = async () => {
-  const browser = await puppeteer.launch({headless: false});
+  const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
-  await page.setViewport({ width: 1920, height: 1080});
+  await page.setViewport({ width: 1920, height: 1080 });
 
-  await page.goto('https://www.dph.illinois.gov/covid19/covid19-statistics');
+  await page.goto("https://www.dph.illinois.gov/covid19/covid19-statistics");
   await delay(1000);
 
   //Click on 'By County' to show statistics and sort by each county. Delay is used to allow SPA function to complete.
-  await page.click('.pagination > li:first-child > a');
+  await page.click(".pagination > li:first-child > a");
   await delay(2000);
 
   //Input County into input field
-  await page.focus('#input-filter');
+  await page.focus("#input-filter");
   page.keyboard.type(county);
-  await delay (1000);
+  await delay(1000);
 
   //Get list and the number of dates displayed. Last element is an arrow and not a date.
-  const dateListElements = await page.$$('#paginMap > li');
+  const dateListElements = await page.$$("#paginMap > li");
   const dateLength = dateListElements.length - 1;
-  
+
   // we want to create a loop that traverses each date and add it to a newly created data object.
   let CovidData = [];
   for (let i = dateLength - 1; i > 0; i--) {
     //Click on the date and wait to load
-    let dateLink = await page.$('#paginMap > li:nth-child(' + (i + 1) + ') > a')
+    let dateLink = await page.$("#paginMap > li:nth-child(" + (i + 1) + ") > a");
     await dateLink.click();
     await delay(500);
 
     // get data from page
-    let dataDate = await page.evaluate(el => el.innerHTML, dateLink);
+    let dataDate = await page.evaluate((el) => el.innerHTML, dateLink);
     console.log(dataDate);
 
-    const detailedData = await page.$('#detailedData');
-    let caseCount = await page.evaluate(el => {
-      return el.querySelector('tbody > tr > td:nth-child(3)').innerHTML;
+    const detailedData = await page.$("#detailedData");
+    let caseCount = await page.evaluate((el) => {
+      return el.querySelector("tbody > tr > td:nth-child(3)").innerHTML;
     }, detailedData);
     console.log(caseCount);
 
-    let deathCount = await page.evaluate(el => {
-      return el.querySelector('tbody > tr > td:nth-child(4)').innerHTML;
+    let deathCount = await page.evaluate((el) => {
+      return el.querySelector("tbody > tr > td:nth-child(4)").innerHTML;
     }, detailedData);
     console.log(deathCount);
 
     // create object with data and push to array
-    CovidData.push({date: dataDate, cases: caseCount, deaths: deathCount});
+    CovidData.push({ date: dataDate, cases: caseCount, deaths: deathCount });
   }
 
   console.log("Covid Data");
   console.log(CovidData);
   await browser.close();
+  return CovidData
 };
+
+//
+// const CreateCSV = () => {
+
+// }
 
 // PROGRAM STARTS HERE
 // Reading user inputting the county. This is will call all other functions.
@@ -72,5 +78,7 @@ readline.question(`County?`, (inputCounty) => {
   // console.log("County: " + county);
 
   // Begin crawling website
-  getCovid19();
+  const CovidData = getCovid19();
+
+  //
 });
