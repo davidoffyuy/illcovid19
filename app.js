@@ -3,6 +3,8 @@ const readline = require("readline").createInterface({
   input: process.stdin,
   output: process.stdout,
 });
+const createCsvWriter = require('csv-writer').createObjectCsvWriter;
+
 const delay = require("./util/delay");
 
 //GLOBAL DECLARATION
@@ -63,10 +65,23 @@ const getCovid19 = async () => {
   return CovidData
 };
 
-//
-// const CreateCSV = () => {
 
-// }
+const CreateCSV = (data) => {
+  const csvWriter = createCsvWriter({
+    path: 'results/' + county + '.csv',
+    header: [
+        {id: 'date', title: 'DATE'},
+        {id: 'cases', title: 'CASES'},
+        {id: 'deaths', title: 'DEATHS'}
+    ]
+  });
+
+  csvWriter.writeRecords(data)       // returns a promise
+    .then(() => {
+        console.log('Write To File Done');
+    });
+
+}
 
 // PROGRAM STARTS HERE
 // Reading user inputting the county. This is will call all other functions.
@@ -77,8 +92,6 @@ readline.question(`County?`, (inputCounty) => {
   county = inputCounty;
   // console.log("County: " + county);
 
-  // Begin crawling website
-  const CovidData = getCovid19();
-
-  //
+  // Crawling website
+  getCovid19().then(data => CreateCSV(data));
 });
