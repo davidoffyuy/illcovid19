@@ -5,7 +5,9 @@ const readline = require("readline").createInterface({
 });
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 
+//UTILITIES
 const delay = require("./util/delay");
+const removeSpace = require("./util/removeSpace");
 
 //GLOBAL DECLARATION
 let county = "";
@@ -56,7 +58,7 @@ const getCovid19 = async () => {
     console.log(deathCount);
 
     // create object with data and push to array
-    CovidData.push({ date: dataDate, cases: caseCount, deaths: deathCount });
+    CovidData.push({ date: removeSpace(dataDate), cases: caseCount, deaths: deathCount });
   }
 
   console.log("Covid Data");
@@ -85,7 +87,7 @@ const CreateCSV = (data) => {
 
 // PROGRAM STARTS HERE
 // Reading user inputting the county. This is will call all other functions.
-readline.question(`County?`, (inputCounty) => {
+readline.question(`County?\n`, (inputCounty) => {
   readline.close();
 
   // Set the county
