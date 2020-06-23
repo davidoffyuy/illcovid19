@@ -40,7 +40,7 @@ const getCovid19 = async () => {
     //Click on the date and wait to load
     let dateLink = await page.$("#paginMap > li:nth-child(" + (i + 1) + ") > a");
     await dateLink.click();
-    await delay(1500);
+    await delay(2000);
 
     // get data from page
     let dataDate = await page.evaluate((el) => el.innerHTML, dateLink);
