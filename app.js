@@ -91,7 +91,7 @@ readline.question(`County?\n`, (inputCounty) => {
   readline.close();
 
   // Set the county
-  county = inputCounty;
+  county = inputCounty.toLocaleLowerCase();
   // console.log("County: " + county);
 
   // Crawling website
