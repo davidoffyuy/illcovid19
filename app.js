@@ -36,7 +36,7 @@ const getCovid19 = async () => {
 
   // we want to create a loop that traverses each date and add it to a newly created data object.
   let CovidData = [];
-  for (let i = dateLength - 1; i >= 0; i--) {
+  for (let i = 0; i <= dateLength - 1; i++) {
     //Click on the date and wait to load
     let dateLink = await page.$("#paginMap > li:nth-child(" + (i + 1) + ") > a");
     await dateLink.click();
