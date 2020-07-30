@@ -47,6 +47,12 @@ const getCovid19 = async () => {
     console.log(dataDate);
 
     const detailedData = await page.$("#detailedData");
+
+    let testCount = await page.evaluate((el) => {
+      return el.querySelector("tbody > tr > td:nth-child(2)").innerHTML;
+    }, detailedData);
+    console.log(testCount);
+
     let caseCount = await page.evaluate((el) => {
       return el.querySelector("tbody > tr > td:nth-child(3)").innerHTML;
     }, detailedData);
@@ -58,7 +64,7 @@ const getCovid19 = async () => {
     console.log(deathCount);
 
     // create object with data and push to array
-    CovidData.push({ date: removeSpace(dataDate), cases: caseCount, deaths: deathCount });
+    CovidData.push({ date: removeSpace(dataDate), tests: testCount, cases: caseCount, deaths: deathCount });
   }
 
   console.log("Covid Data");
@@ -73,6 +79,7 @@ const CreateCSV = (data) => {
     path: 'results/' + county + '.csv',
     header: [
         {id: 'date', title: 'DATE'},
+        {id: 'tests', title: 'TESTS'},
         {id: 'cases', title: 'CASES'},
         {id: 'deaths', title: 'DEATHS'}
     ]
