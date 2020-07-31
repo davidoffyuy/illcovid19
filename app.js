@@ -10,10 +10,10 @@ const delay = require("./util/delay");
 const removeSpace = require("./util/removeSpace");
 
 //GLOBAL DECLARATION
-let county = "";
 
 //Function will use Puppeteer to get all data
-const getCovid19 = async () => {
+const getCovid19 = async (county) => {
+
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
   await page.setViewport({ width: 1920, height: 1080 });
@@ -74,7 +74,7 @@ const getCovid19 = async () => {
 };
 
 
-const CreateCSV = (data) => {
+const CreateCSV = (county, data) => {
   const csvWriter = createCsvWriter({
     path: 'results/' + county + '.csv',
     header: [
@@ -97,10 +97,9 @@ const CreateCSV = (data) => {
 readline.question(`County?\n`, (inputCounty) => {
   readline.close();
 
-  // Set the county
-  county = inputCounty.toLocaleLowerCase();
-  // console.log("County: " + county);
+  // Get county name to store
+  let countyName = inputCounty.toLocaleLowerCase();
 
   // Crawling website
-  getCovid19().then(data => CreateCSV(data));
+  getCovid19(countyName).then(data => CreateCSV(countyName, data));
 });
