@@ -1,4 +1,5 @@
 const covidCrawler = require("./covidCrawler");
+const removeSpace = require("./util/removeSpace");
 
 const readline = require("readline").createInterface({
   input: process.stdin,
@@ -7,12 +8,13 @@ const readline = require("readline").createInterface({
 
 // PROGRAM STARTS HERE
 // Reading user inputting the county. This is will call all other functions.
-readline.question(`County?\n`, (inputCounty) => {
+readline.question(`County? (use comma for multiple)\n`, (inputCounties) => {
   readline.close();
 
   // Get county name to store
-  let countyName = inputCounty.toLocaleLowerCase();
+  let counties = removeSpace(inputCounties).toLocaleLowerCase().split(",");
+  console.log(counties);
 
   // Crawling website
-  covidCrawler.getCovid19(countyName).then(data => covidCrawler.createCSV(countyName, data));
+  covidCrawler.getCovid19(counties[0]).then(data => covidCrawler.createCSV(counties[0], data));
 });
