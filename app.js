@@ -7,7 +7,7 @@ const readline = require("readline").createInterface({
 });
 
 // PROGRAM STARTS HERE
-// Reading user inputting the county. This is will call all other functions.
+// Reading user input. Comma separated string supported.
 readline.question(`County? (use comma for multiple)\n`, (inputCounties) => {
   readline.close();
 
@@ -15,6 +15,6 @@ readline.question(`County? (use comma for multiple)\n`, (inputCounties) => {
   let counties = removeSpace(inputCounties).toLocaleLowerCase().split(",");
   console.log(counties);
 
-  // Crawling website
+  // Crawl Illinois' Covid19 data website for data
   covidCrawler.getCovid19(counties[0]).then(data => covidCrawler.createCSV(counties[0], data));
 });
