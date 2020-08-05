@@ -4,7 +4,7 @@ const delay = require("./util/delay");
 const removeSpace = require("./util/removeSpace");
 
 //Function will use Puppeteer to get all data
-const getCovid19 = async (county) => {
+const getCovidData = async (county) => {
 
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
@@ -77,12 +77,19 @@ const createCSV = (county, data) => {
     ]
   });
 
-  csvWriter.writeRecords(data)       // returns a promise
+  return csvWriter.writeRecords(data)       // returns a promise
     .then(() => {
         console.log('Write To File Done');
     });
 
 }
 
-exports.getCovid19 = getCovid19;
+//Helper Function to call getCovidData and createCSV at the same time w/ one call
+const completeCovid = async (county) => {
+  const data = await getCovidData(county);
+  return await createCSV(county, data);
+}
+
+exports.getCovidData = getCovidData;
 exports.createCSV = createCSV;
+exports.completeCovid = completeCovid;

@@ -6,6 +6,12 @@ const readline = require("readline").createInterface({
   output: process.stdout,
 });
 
+const crawlCovidCounties = async (counties) => {
+  for (let i = 0; i < counties.length ; i++) {
+    await covidCrawler.completeCovid(counties[i]);
+  }
+}
+
 // PROGRAM STARTS HERE
 // Reading user input. Comma separated string supported.
 readline.question(`County? (use comma for multiple)\n`, (inputCounties) => {
@@ -16,5 +22,7 @@ readline.question(`County? (use comma for multiple)\n`, (inputCounties) => {
   console.log(counties);
 
   // Crawl Illinois' Covid19 data website for data
-  covidCrawler.getCovid19(counties[0]).then(data => covidCrawler.createCSV(counties[0], data));
+  crawlCovidCounties(counties).then(() => {
+    console.log("All Tasks Completed");
+  });
 });
