@@ -2,6 +2,8 @@ const puppeteer = require("puppeteer");
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 const delay = require("./util/delay");
 const removeSpace = require("./util/removeSpace");
+const dateText = require("./util/getDateText");
+const getDateText = require("./util/getDateText");
 
 //Function will use Puppeteer to get all data
 const getCovidData = async (county) => {
@@ -68,7 +70,7 @@ const getCovidData = async (county) => {
 
 const createCSV = (county, data) => {
   const csvWriter = createCsvWriter({
-    path: 'results/' + county + '.csv',
+    path: 'results/' + county + getDateText() + '.csv',
     header: [
         {id: 'date', title: 'DATE'},
         {id: 'tests', title: 'TESTS'},

@@ -1,4 +1,4 @@
-const getDateFileText = () => {
+const getDateText = () => {
   const today = new Date();
 
   let dateText = "";
@@ -23,4 +23,4 @@ const getDateFileText = () => {
   return dateText + monthText + yearText;
 }
 
-module.exports = getDateFileText;
+module.exports = getDateText;
